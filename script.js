@@ -30,55 +30,59 @@ window.addEventListener("load", function () {
       copilotNameInput = document.querySelector("input[name=copilotName]");
       fuelLevelInput = document.querySelector("input[name=fuelLevel]");
       cargoMassInput = document.querySelector("input[name=cargoMass]");
+      
+      // validate that form fields are filled
       if (pilotNameInput.value === "" || copilotNameInput.value === "" || 
          fuelLevelInput.value === "" || cargoMassInput.value === "") {
          alert("All fields are required!");
 			event.preventDefault();
       } else {
+         // validate that form fields have correct data type
          if (!isNaN(pilotNameInput.value) || !isNaN(copilotNameInput.value) ||
          isNaN(fuelLevelInput.value) || isNaN(cargoMassInput.value)) {
          alert("Make sure to enter valid information for each field!");
          event.preventDefault();
       } else changeLaunchInfo();
       }
-   
-   
-      });
+   });
+
    function changeLaunchInfo () {
       document.getElementById("pilotStatus").innerHTML = `Pilot ${pilotNameInput.value} is ready for launch`;
       document.getElementById("copilotStatus").innerHTML = `Co-pilot ${copilotNameInput.value} is ready for launch`;
-      
+      // change launch status if fuel level is too low
       if (fuelLevelInput.value < 10000) {
          document.getElementById("faultyItems").style.visibility = "visible";
          document.getElementById("fuelStatus").innerHTML = "Fuel level too low for launch";
          document.getElementById("launchStatus").innerHTML = "Shuttle Not Ready For Launch";
          document.getElementById("launchStatus").style.color = "red";
+         // also check cargoMass if form was resubmitted
          if (cargoMassInput.value > 10000) {
             document.getElementById("cargoStatus").innerHTML = "Cargo mass too heavy for launch";
          } else {
             document.getElementById("cargoStatus").innerHTML = "Cargo mass low enough for launch";
          }
       }
-      
+      // change launch status if cargo mass is too heavy
       if (cargoMassInput.value > 10000) {
          document.getElementById("faultyItems").style.visibility = "visible";
          document.getElementById("cargoStatus").innerHTML = "Cargo mass too heavy for launch";
          document.getElementById("launchStatus").innerHTML = "Shuttle Not Ready For Launch";
          document.getElementById("launchStatus").style.color = "red";
+         // also check fuel level if form was resubmitted
          if (fuelLevelInput.value < 10000) {
             document.getElementById("fuelStatus").innerHTML = "Fuel level too low for launch";
          } else {
             document.getElementById("fuelStatus").innerHTML = "Fuel level high enough for launch";
          }
       }
-      
+      // set launch status to green, and reset "faultyItems" if form was resubmitted
       if (cargoMassInput.value <= 10000 && fuelLevelInput.value >= 10000) {
-         document.getElementById("launchStatus").innerHTML = "Shuttle Is Ready For Launch";
-         document.getElementById("launchStatus").style.color = "green";
-         document.getElementById("faultyItems").style.visibility = "hidden";
+         document.getElementById("faultyItems").style.visibility = "visible";
          document.getElementById("fuelStatus").innerHTML = "Fuel level high enough for launch";
          document.getElementById("cargoStatus").innerHTML = "Cargo mass low enough for launch";
-      }
+         document.getElementById("launchStatus").innerHTML = "Shuttle Is Ready For Launch";
+         document.getElementById("launchStatus").style.color = "green";
+         }
    };
 });
 
